@@ -93,7 +93,7 @@ require('includes/page-properties.php');
                                                                             <div class="event-overlay">
                                                                                 <a class="overlay-top" href="course/<?php echo $course['id']."/".StringManipulator::slugify($course['name']); ?>/" title="<?php echo $course['name']; ?>">
                                                                                 <h4><?php echo $course['name']; ?></h4>
-                                                                                <span class="price yellow"> <span class="naira">N</span><?php echo number_format($course['amount'], 2); ?></span>
+                                                                                <span class="price yellow"> <?php echo $course['currency'].' '.number_format($course['amount'], 2); ?></span>
                                                                                 </a>
                                                                                 <div class="overlay-bottom">
                                                                                     <div><?php echo StringManipulator::trimStringToFullWord(250, trim(stripcslashes(strip_tags($course['description'])))); ?></div>

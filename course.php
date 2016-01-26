@@ -62,7 +62,7 @@ if(isset($_POST['submit'])){
 //get the course id; if failed redirect to course-categories page
 $thisCourseId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ? filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) : $thisPage->redirectTo('courses');
 foreach ($courseObj->fetchRaw("*", " status = 1 AND id = $thisCourseId ") as $course) {
-    $courseData = array('id' => 'id', 'name' => 'name', 'code' => 'code', 'image' => 'image', 'media' => 'media', 'amount' => 'amount', 'shortName' => 'short_name', 'category' => 'category', 'startDate' => 'start_date', 'endDate' => 'end_date', 'description' => 'description', 'status' => 'status');
+    $courseData = array('id' => 'id', 'name' => 'name', 'code' => 'code', 'image' => 'image', 'media' => 'media', 'amount' => 'amount', 'shortName' => 'short_name', 'category' => 'category', 'startDate' => 'start_date', 'endDate' => 'end_date', 'description' => 'description', 'status' => 'status', 'currency' => 'currency');
     foreach ($courseData as $key => $value){
         switch ($key) { 
             case 'image': $courseObj->$key = MEDIA_FILES_PATH1.'course-image/'.$course[$value];break;
@@ -163,7 +163,7 @@ $thisPage->description = StringManipulator::trimStringToFullWord(150, trim(strip
                                                     </div>
                                                     <div class="col-md-6 col-sm-6">
                                                         <h4 class="small-text"><i class="fa fa-money"></i> Amount: </h4>
-                                                        <p><span class="naira">N</span><?php echo number_format($courseObj->amount, 2); ?></p>
+                                                        <p><?php echo $courseObj->currency.' '.number_format($courseObj->amount, 2); ?></p>
                                                         <h4 class="small-text"><i class="fa fa-briefcase"></i> Category: </h4>
                                                         <p><a href="category?id=<?php echo $courseObj->category; ?>"><?php echo CourseCategory::getName($dbObj, $courseObj->category); ?></a></p>
                                                     </div>
