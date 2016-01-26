@@ -119,7 +119,7 @@ else{
     }
     
     if(filter_input(INPUT_POST, "updateThisCourse") != NULL){
-        $postVars = array('id','name','shortName','category','startDate','endDate','code','description','media','amount','image'); // Form fields names
+        $postVars = array('id','name','shortName','category','startDate','endDate','code','description','media','amount','image','currency'); // Form fields names
         $oldMedia = $_REQUEST['oldFile']; $oldImage = $_REQUEST['oldImage'];
         //Validate the POST variables and add up to error message if empty
         foreach ($postVars as $postVar){

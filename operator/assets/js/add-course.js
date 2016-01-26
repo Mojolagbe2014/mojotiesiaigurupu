@@ -28,6 +28,18 @@ $(document).ready(function(){
         }
     });
     
+    //Fetch all currencies
+    $.ajax({
+        url: "common-currencies.json",
+        type: 'POST',
+        cache: false,
+        success : function(data, status) {
+            $.each(data, function(i, item) {
+                $('#currency').append('<option value="'+item.code+'" title="'+item.name+'">'+item.code+' ('+item.symbol+')</option>');
+            });
+        }
+    });
+    
     $("form#CreateCourse").submit(function(e){ 
         e.stopPropagation();
         e.preventDefault();

@@ -29,6 +29,19 @@ $(document).ready(function(){
 
         }
     });
+    
+    //Fetch all currencies
+    $.ajax({
+        url: "common-currencies.json",
+        type: 'POST',
+        cache: false,
+        success : function(data, status) {
+            $.each(data, function(i, item) {
+                $('#currency').append('<option value="'+item.code+'" title="'+item.name+'">'+item.code+' ('+item.symbol+')</option>');
+            });
+        }
+    });
+    
     loadAllRegisteredCourses();
     function loadAllRegisteredCourses(){
         var dataTable = $('#courseslist').DataTable( {
@@ -59,7 +72,7 @@ $(document).ready(function(){
         if(confirm("Are you sure you want to delete this course ["+$(this).attr('data-name')+"]? Course media ['"+$(this).attr('data-media')+"'] will be deleted too.")) deleteCourse($(this).attr('data-id'),$(this).attr('data-media'),$(this).attr('data-image'));
     });
     $(document).on('click', '.edit-course', function() {
-        if(confirm("Are you sure you want to edit this course ["+$(this).attr('data-name')+"] details?")) editCourse($(this).attr('data-id'), $(this).attr('data-name'), $(this).attr('data-short-name'), $(this).attr('data-category'), $(this).attr('data-start-date'), $(this).attr('data-end-date'), $(this).attr('data-code'), $(this).find('span#JQDTdescriptionholder').html(), $(this).attr('data-media'), $(this).attr('data-amount'), $(this).attr('data-image'));
+        if(confirm("Are you sure you want to edit this course ["+$(this).attr('data-name')+"] details?")) editCourse($(this).attr('data-id'), $(this).attr('data-name'), $(this).attr('data-short-name'), $(this).attr('data-category'), $(this).attr('data-start-date'), $(this).attr('data-end-date'), $(this).attr('data-code'), $(this).find('span#JQDTdescriptionholder').html(), $(this).attr('data-media'), $(this).attr('data-amount'), $(this).attr('data-image'), $(this).attr('data-currency'));
     });
     $(document).on('click', '.make-featured-course', function() {
         featuredStatus = 'Made Featured'; if(parseInt($(this).attr('data-featured')) == 1) featuredStatus = "Removed as featured";
@@ -120,8 +133,8 @@ $(document).ready(function(){
         });
     }
     
-    function editCourse(id, name, shortName, category, startDate, endDate, code, description, media, amount, image){//,
-        var formVar = {id:id, name:name, shortName:shortName, category:category, startDate:startDate, endDate:endDate, code:code, description:description, media:media, amount:amount, image:image };
+    function editCourse(id, name, shortName, category, startDate, endDate, code, description, media, amount, image, currency){//,
+        var formVar = {id:id, name:name, shortName:shortName, category:category, startDate:startDate, endDate:endDate, code:code, description:description, media:media, amount:amount, image:image, currency:currency };
         $.each(formVar, function(key, value) { 
             if(key == 'media') { $('form #oldFile').val(value); $('form #oldFileComment').text(value).css('color','red');} 
             else if(key == 'image') { $('form #oldImage').val(value); $('form #oldImageComment').html('<img src="../media/course-image/'+value+'" style="width:50px;height:50px; margin:5px">');}

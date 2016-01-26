@@ -135,10 +135,23 @@
                                         </div>
                                     </div>
                                         
-                                    <div class="form-group">
+<!--                                    <div class="form-group">
                                         <label class="control-label" for="amount">Price (<span class="naira">N</span>):</label>
                                         <div class="controls">
                                             <input data-title="course amount" type="number" placeholder="course amount" id="amount" name="amount" data-original-title="Course amount" class="form-control">
+                                        </div>
+                                    </div>-->
+                                    <div class="form-group">
+                                        <label class="control-label" for="amount">Price:</label>
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">
+                                                <select name="currency" id="currency" required="required">
+                                                    <option value=""> --- </option>
+                                                </select>
+                                            </span>
+                                        <div class="controls">
+                                            <input data-title="course amount" type="number" placeholder="course amount" id="amount" name="amount" data-original-title="Course amount" class="form-control" required="required">
+                                        </div>
                                         </div>
                                     </div>
                                     
