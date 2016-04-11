@@ -1,3 +1,4 @@
+var dataTable;
 $(document).ready(function(){
     $( "#startDate" ).datepicker({ 
         dateFormat: "yy-mm-dd",appendText: "(yyyy-mm-dd)", changeMonth: true, changeYear: true,
@@ -44,7 +45,17 @@ $(document).ready(function(){
     
     loadAllRegisteredCourses();
     function loadAllRegisteredCourses(){
-        var dataTable = $('#courseslist').DataTable( {
+            dataTable = $('#courseslist').DataTable( {
+            columnDefs: [ {
+                orderable: false,
+                className: 'select-checkbox',
+                targets:   [12]
+            } ],
+            select: {
+                style:    'os',
+                selector: 'td:first-child'
+            },
+            order: [[ 0, 'asc' ]],
             "processing": true,
             "serverSide": true,
             "scrollX": true,
@@ -52,10 +63,11 @@ $(document).ready(function(){
                 url :"../REST/manage-courses.php", //employee-grid-data.php",// json datasource
                 type: "post",  // method  , by default get
                 data: {fetchCourses:'true'},
-                error: function(){  // error handling
-                        $("#courseslist-error").html("");
-                        $("#courseslist").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-                        $("#courseslist_processing").css("display","none");
+                error: function(xhr){  // error handling
+                    console.log(xhr);
+                    $("#courseslist-error").html("");
+                    $("#courseslist").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                    $("#courseslist_processing").css("display","none");
 
                 }
             }
@@ -87,12 +99,27 @@ $(document).ready(function(){
             cache: false,
             success : function(data, status) {
                 if(data.status === 1){
-                    $("#messageBox, .messageBox").html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+' <img src="images/cycling.GIF" width="30" height="30" alt="Ajax Loading"> Re-loading...</div>');
-                    setInterval(function(){ window.location = "";}, 2000);
+                    $("#messageBox, .messageBox").html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+' </div>');
+                    dataTable.ajax.reload();                $.gritter.add({                    title: 'Notification!',                    text: data.msg ? data.msg : data                });
                 }
                 else {
                     $("#messageBox, .messageBox").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+'</div>');
                 }
+            },
+            error : function(xhr, status) {
+                erroMsg = '';
+                if(xhr.status===0){ erroMsg = 'There is a problem connecting to internet. Please review your internet connection.'; }
+                else if(xhr.status===404){ erroMsg = 'Requested page not found.'; }
+                else if(xhr.status===500){ erroMsg = 'Internal Server Error.';}
+                else if(status==='parsererror'){ erroMsg = 'Error. Parsing JSON Request failed.'; }
+                else if(status==='timeout'){  erroMsg = 'Request Time out.';}
+                else { erroMsg = 'Unknow Error.\n'+xhr.responseText;}          
+                $("#messageBox, .messageBox").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Admin details update failed. '+erroMsg+'</div>');
+
+                $.gritter.add({
+                    title: 'Notification!',
+                    text: erroMsg
+                });
             }
         });
     }
@@ -105,12 +132,27 @@ $(document).ready(function(){
             cache: false,
             success : function(data, status) {
                 if(data.status === 1){
-                    $("#messageBox, .messageBox").html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Course Successfully '+currentStatus+'d! <img src="images/cycling.GIF" width="30" height="30" alt="Ajax Loading"> Reloading ...</div>');
-                    setInterval(function(){ window.location = "";}, 2000);
+                    $("#messageBox, .messageBox").html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Course Successfully '+currentStatus+'d! </div>');
+                    dataTable.ajax.reload();                $.gritter.add({                    title: 'Notification!',                    text: data.msg ? data.msg : data                });
                 }
                 else {
                     $("#messageBox, .messageBox").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Course Activation Failed. '+data.msg+'</div>');
                 }
+            },
+            error : function(xhr, status) {
+                erroMsg = '';
+                if(xhr.status===0){ erroMsg = 'There is a problem connecting to internet. Please review your internet connection.'; }
+                else if(xhr.status===404){ erroMsg = 'Requested page not found.'; }
+                else if(xhr.status===500){ erroMsg = 'Internal Server Error.';}
+                else if(status==='parsererror'){ erroMsg = 'Error. Parsing JSON Request failed.'; }
+                else if(status==='timeout'){  erroMsg = 'Request Time out.';}
+                else { erroMsg = 'Unknow Error.\n'+xhr.responseText;}          
+                $("#messageBox, .messageBox").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Admin details update failed. '+erroMsg+'</div>');
+
+                $.gritter.add({
+                    title: 'Notification!',
+                    text: erroMsg
+                });
             }
         });
     }
@@ -123,12 +165,27 @@ $(document).ready(function(){
             cache: false,
             success : function(data, status) {
                 if(data.status === 1){
-                    $("#messageBox, .messageBox").html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Course Successfully '+featuredStatus+' Course! <img src="images/cycling.GIF" width="30" height="30" alt="Ajax Loading"> Reloading ...</div>');
-                    setInterval(function(){ window.location = "";}, 2000);
+                    $("#messageBox, .messageBox").html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Course Successfully '+featuredStatus+' Course! </div>');
+                    dataTable.ajax.reload();                $.gritter.add({                    title: 'Notification!',                    text: data.msg ? data.msg : data                });
                 }
                 else {
                     $("#messageBox, .messageBox").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Course Featuring Failed. '+data.msg+'</div>');
                 }
+            },
+            error : function(xhr, status) {
+                erroMsg = '';
+                if(xhr.status===0){ erroMsg = 'There is a problem connecting to internet. Please review your internet connection.'; }
+                else if(xhr.status===404){ erroMsg = 'Requested page not found.'; }
+                else if(xhr.status===500){ erroMsg = 'Internal Server Error.';}
+                else if(status==='parsererror'){ erroMsg = 'Error. Parsing JSON Request failed.'; }
+                else if(status==='timeout'){  erroMsg = 'Request Time out.';}
+                else { erroMsg = 'Unknow Error.\n'+xhr.responseText;}          
+                $("#messageBox, .messageBox").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Admin details update failed. '+erroMsg+'</div>');
+
+                $.gritter.add({
+                    title: 'Notification!',
+                    text: erroMsg
+                });
             }
         });
     }
@@ -141,6 +198,7 @@ $(document).ready(function(){
             else $('form #'+key).val(value);  
         });
         $('#hiddenUpdateForm').removeClass('hidden');
+        $(document).scrollTo('div#hiddenUpdateForm');
         CKEDITOR.instances['description'].setData(description);
         $("form#UpdateCourse").submit(function(e){ 
             e.stopPropagation(); 
@@ -157,8 +215,8 @@ $(document).ready(function(){
             success : function(data, status) {
                 $("#hiddenUpdateForm").addClass('hidden');
                 if(data.status === 1) {
-                    $("#messageBox, .messageBox").html('<div class="alert alert-'+alertType[data.status]+'"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+' <img src="images/cycling.GIF" width="30" height="30" alt="Ajax Loading"> Reloading ...</div>');
-                    setInterval(function(){ window.location = "";}, 2000);
+                    $("#messageBox, .messageBox").html('<div class="alert alert-'+alertType[data.status]+'"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+' </div>');
+                    dataTable.ajax.reload();                $.gritter.add({                    title: 'Notification!',                    text: data.msg ? data.msg : data                });
                 }
                 else if(data.status === 2 || data.status === 3 || data.status ===0 ) $("#messageBox").html('<div class="alert alert-info"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+'</div>');
                 else $("#messageBox, .messageBox").html('<div class="alert alert-info"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+'</div>');
@@ -171,7 +229,12 @@ $(document).ready(function(){
                 else if(status==='parsererror'){ erroMsg = 'Error. Parsing JSON Request failed.'; }
                 else if(status==='timeout'){  erroMsg = 'Request Time out.';}
                 else { erroMsg = 'Unknow Error.\n'+xhr.responseText;}          
-                $("#messageBox, .messageBox").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Failed. '+erroMsg+'</div>');
+                $("#messageBox, .messageBox").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Admin details update failed. '+erroMsg+'</div>');
+
+                $.gritter.add({
+                    title: 'Notification!',
+                    text: erroMsg
+                });
             },
             processData: false
         });

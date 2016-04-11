@@ -16,7 +16,7 @@ if(!isset($_SESSION['TSILoggedInAdmin']) || !isset($_SESSION["TSIadminEmail"])){
 else{
     if(filter_input(INPUT_POST, "fetchCourses") != NULL){
         $requestData= $_REQUEST;
-        $columns = array( 0 =>'id', 1 => 'name', 2 => 'short_name', 3 => 'category', 4 => 'start_date', 5 => 'code', 6 => 'description', 7 => 'media', 8 => 'amount', 9 => 'status', 10 => 'date_registered');
+        $columns = array( 0 =>'id', 1 => 'name', 2 => 'short_name', 3 => 'category', 4 => 'start_date', 5 => 'end_date', 6 => 'code', 7 => 'description', 8 => 'media', 9 => 'amount', 10 => 'image', 11 => 'date_registered', 12 => 'status');
 
         // getting total number records without any search
         $query = $dbObj->query("SELECT * FROM course ");
@@ -30,6 +30,7 @@ else{
                 $sql.=" OR description LIKE '%".$requestData['search']['value']."%' ";
                 $sql.=" OR media LIKE '%".$requestData['search']['value']."%' ";
                 $sql.=" OR start_date LIKE '%".$requestData['search']['value']."%' ";
+                $sql.=" OR end_date LIKE '%".$requestData['search']['value']."%' ";
                 $sql.=" OR date_registered LIKE '%".$requestData['search']['value']."%' ";
                 $sql.=" OR amount LIKE '%".$requestData['search']['value']."%' ";
                 $sql.=" OR short_name LIKE '%".$requestData['search']['value']."%' ) ";
@@ -124,11 +125,11 @@ else{
         //Validate the POST variables and add up to error message if empty
         foreach ($postVars as $postVar){
             switch($postVar){
-                case 'media':   $newMedia = basename($_FILES["file"]["name"]) ? rand(100000, 1000000)."_".  strtolower(str_replace(" ", "_", filter_input(INPUT_POST, 'code'))).".".pathinfo(basename($_FILES["file"]["name"]),PATHINFO_EXTENSION): ""; 
+                case 'media':   $newMedia = isset($_FILES["file"]) ? rand(100000, 1000000)."_".  strtolower(str_replace(" ", "_", filter_input(INPUT_POST, 'code'))).".".pathinfo(basename($_FILES["file"]["name"]),PATHINFO_EXTENSION): ""; 
                                 $courseObj->$postVar = $newMedia;
                                 $courseMedFil = $newMedia;
                                 break;
-                case 'image':   $newImage = basename($_FILES["image"]["name"]) ? rand(100000, 1000000)."_".  strtolower(str_replace(" ", "_", filter_input(INPUT_POST, 'code'))).".".pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION): ""; 
+                case 'image':   $newImage = isset($_FILES["image"]) ? rand(100000, 1000000)."_".  strtolower(str_replace(" ", "_", filter_input(INPUT_POST, 'code'))).".".pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION): ""; 
                                 $courseObj->$postVar = $newImage;
                                 if($courseObj->$postVar == "") { $courseObj->$postVar = $oldImage;}
                                 $courseImageFil = $newImage;
