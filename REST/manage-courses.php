@@ -121,15 +121,15 @@ else{
     
     if(filter_input(INPUT_POST, "updateThisCourse") != NULL){
         $postVars = array('id','name','shortName','category','startDate','endDate','code','description','media','amount','image','currency'); // Form fields names
-        $oldMedia = $_REQUEST['oldFile']; $oldImage = $_REQUEST['oldImage'];
+        $oldMedia = $_REQUEST['oldFile']; $oldImage = $_REQUEST['oldImage'];$newMedia ="";$newImage ="";
         //Validate the POST variables and add up to error message if empty
         foreach ($postVars as $postVar){
             switch($postVar){
-                case 'media':   $newMedia = isset($_FILES["file"]) ? rand(100000, 1000000)."_".  strtolower(str_replace(" ", "_", filter_input(INPUT_POST, 'code'))).".".pathinfo(basename($_FILES["file"]["name"]),PATHINFO_EXTENSION): ""; 
+                case 'media':   $newMedia = basename($_FILES["file"]["name"]) ? rand(100000, 1000000)."_".  strtolower(str_replace(" ", "_", filter_input(INPUT_POST, 'code'))).".".pathinfo(basename($_FILES["file"]["name"]),PATHINFO_EXTENSION): ""; 
                                 $courseObj->$postVar = $newMedia;
                                 $courseMedFil = $newMedia;
                                 break;
-                case 'image':   $newImage = isset($_FILES["image"]) ? rand(100000, 1000000)."_".  strtolower(str_replace(" ", "_", filter_input(INPUT_POST, 'code'))).".".pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION): ""; 
+                case 'image':   $newImage = basename($_FILES["image"]["name"]) ? rand(100000, 1000000)."_".  strtolower(str_replace(" ", "_", filter_input(INPUT_POST, 'code'))).".".pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION): ""; 
                                 $courseObj->$postVar = $newImage;
                                 if($courseObj->$postVar == "") { $courseObj->$postVar = $oldImage;}
                                 $courseImageFil = $newImage;

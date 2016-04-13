@@ -218,11 +218,12 @@ $(document).ready(function(){
                     $("#messageBox, .messageBox").html('<div class="alert alert-'+alertType[data.status]+'"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+' </div>');
                     dataTable.ajax.reload();                $.gritter.add({                    title: 'Notification!',                    text: data.msg ? data.msg : data                });
                 }
-                else if(data.status === 2 || data.status === 3 || data.status ===0 ) $("#messageBox").html('<div class="alert alert-info"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+'</div>');
-                else $("#messageBox, .messageBox").html('<div class="alert alert-info"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+'</div>');
+                else if(data.status === 2 || data.status === 3 || data.status ===0 ) $("#messageBox, .messageBox").html('<div class="alert alert-'+alertType[data.status]+'"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg+'</div>');
+                else $("#messageBox, .messageBox").html('<div class="alert alert-'+alertType[data.status]+'"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.msg ? data.msg : data+'</div>');
             },
             error : function(xhr, status) {
                 erroMsg = '';
+                console.log(xhr);
                 if(xhr.status===0){ erroMsg = 'There is a problem connecting to internet. Please review your internet connection.'; }
                 else if(xhr.status===404){ erroMsg = 'Requested page not found.'; }
                 else if(xhr.status===500){ erroMsg = 'Internal Server Error.';}
